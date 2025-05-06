@@ -11,10 +11,11 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:widgetbook/widgetbook.dart' as _i1;
-import 'package:widgetbook_workspace/auth_screen.dart' as _i6;
+import 'package:widgetbook_workspace/auth_screen.dart' as _i7;
 import 'package:widgetbook_workspace/button_widget.dart' as _i2;
 import 'package:widgetbook_workspace/dropdown_widget.dart' as _i3;
-import 'package:widgetbook_workspace/otp_screen.dart' as _i5;
+import 'package:widgetbook_workspace/forgot_password_screen.dart' as _i5;
+import 'package:widgetbook_workspace/otp_screen.dart' as _i6;
 import 'package:widgetbook_workspace/textfield_widget.dart' as _i4;
 
 final directories = <_i1.WidgetbookNode>[
@@ -57,17 +58,24 @@ final directories = <_i1.WidgetbookNode>[
         name: 'screens',
         children: [
           _i1.WidgetbookLeafComponent(
+            name: 'ForgotPasswordScreen',
+            useCase: _i1.WidgetbookUseCase(
+              name: 'Default',
+              builder: _i5.defaultForgotPasswordScreenUseCase,
+            ),
+          ),
+          _i1.WidgetbookLeafComponent(
             name: 'OtpScreen',
             useCase: _i1.WidgetbookUseCase(
               name: 'Default',
-              builder: _i5.defaultButtonUseCase,
+              builder: _i6.defaultOtpScreenUseCase,
             ),
           ),
           _i1.WidgetbookLeafComponent(
             name: 'SignupScreen',
             useCase: _i1.WidgetbookUseCase(
               name: 'Default',
-              builder: _i6.defaultAythScreenUseCase,
+              builder: _i7.defaultAythScreenUseCase,
             ),
           ),
         ],
