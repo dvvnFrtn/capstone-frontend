@@ -23,7 +23,7 @@ Widget defaultAythScreenUseCase(BuildContext context) {
       BlocProvider<SignupBloc>(create: (_) => SignupBloc(usecaseSignup)),
       BlocProvider<RegionalBloc>(create: (_) => RegionalBloc(usecaseRegional)),
     ],
-    child: SignupScreen(),
+    child: SignupScreen(listener: (context, state) {}),
   );
 }
 
