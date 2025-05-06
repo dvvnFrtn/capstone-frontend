@@ -22,7 +22,8 @@ class GoapiRegionalDatasource implements RegionalDatasource {
     try {
       final response = await client.get('/regional/provinsi');
       return ProvinceResponse.fromJson(response.data);
-    } on DioException catch (_) {
+    } on DioException catch (e) {
+      print(e.toString());
       return null;
     }
   }

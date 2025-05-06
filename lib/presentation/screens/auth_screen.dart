@@ -1,9 +1,13 @@
 import 'package:capstone_frontend/bloc/regional/regional_bloc.dart';
 import 'package:capstone_frontend/bloc/regional/regional_event.dart';
 import 'package:capstone_frontend/bloc/regional/regional_state.dart';
+import 'package:capstone_frontend/bloc/signup/signup_bloc.dart';
+import 'package:capstone_frontend/bloc/signup/signup_event.dart';
+import 'package:capstone_frontend/bloc/signup/signup_state.dart';
 import 'package:capstone_frontend/data/model/city_model.dart';
 import 'package:capstone_frontend/data/model/district_model.dart';
 import 'package:capstone_frontend/data/model/province_model.dart';
+import 'package:capstone_frontend/data/model/signup_model.dart';
 import 'package:capstone_frontend/data/model/subdistrict_model.dart';
 import 'package:capstone_frontend/data/validator.dart';
 import 'package:capstone_frontend/presentation/components/button_component.dart';
@@ -168,7 +172,6 @@ class _SignupFormState extends State<SignupForm> {
             label: 'Email',
             validator: emailValidator,
           ),
-          XTextField(controller: _fnController, label: 'Nama Lengkap'),
           XTextField(
             controller: _pwController,
             label: 'Password',
@@ -269,10 +272,41 @@ class _SignupFormState extends State<SignupForm> {
             keyboardType: TextInputType.number,
             validator: (value) => requiredField(value, name: 'RW'),
           ),
-          XButton(
-            label: 'Daftar',
-            onPressed: () {
-              _formKey.currentState!.validate();
+          BlocConsumer<SignupBloc, SignupState>(
+            builder: (context, state) {
+              if (state is SignupLoading) {
+                return CircularProgressIndicator(color: XColors.primary);
+              }
+              return XButton(
+                label: 'Daftar',
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    final request = SignupRequestModel(
+                      email: _emController.text,
+                      password: _pwController.text,
+                      fullname: _fnController.text,
+                      rtNumber: int.parse(_rtController.text),
+                      rwNumber: int.parse(_rwController.text),
+                      subdistrict: _sdController.text,
+                      district: _dsController.text,
+                      city: _ctController.text,
+                      province: _prController.text,
+                    );
+                    context.read<SignupBloc>().add(SignupRequested(request));
+                  }
+                },
+              );
+            },
+            listener: (context, state) {
+              if (state is SignupSuccess) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(state.message)));
+              } else if (state is SignupFailure) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(state.error)));
+              }
             },
           ),
         ],

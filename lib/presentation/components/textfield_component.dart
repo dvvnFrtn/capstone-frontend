@@ -1,5 +1,6 @@
 import 'package:capstone_frontend/presentation/styles/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class XTextField extends StatefulWidget {
   final String label;
@@ -39,10 +40,10 @@ class _XTextFieldState extends State<XTextField> {
       children: [
         Text(
           widget.label,
-          style: TextStyle(
+          style: GoogleFonts.inter(
+            color: XColors.black,
             fontSize: 12.0,
             fontWeight: FontWeight.w600,
-            color: XColors.black,
           ),
         ),
         TextFormField(
@@ -51,7 +52,7 @@ class _XTextFieldState extends State<XTextField> {
           controller: widget.controller,
           cursorColor: XColors.primary,
           cursorErrorColor: Colors.red.shade400,
-          style: TextStyle(fontSize: 16.0),
+          style: GoogleFonts.inter(color: XColors.black, fontSize: 16.0),
           decoration: InputDecoration(
             contentPadding: EdgeInsets.all(16.0),
             suffixIcon:

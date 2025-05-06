@@ -1,10 +1,13 @@
 import 'package:capstone_frontend/bloc/regional/regional_bloc.dart';
+import 'package:capstone_frontend/bloc/signup/signup_bloc.dart';
 import 'package:capstone_frontend/data/model/city_model.dart';
 import 'package:capstone_frontend/data/model/district_model.dart';
 import 'package:capstone_frontend/data/model/province_model.dart';
+import 'package:capstone_frontend/data/model/signup_model.dart';
 import 'package:capstone_frontend/data/model/subdistrict_model.dart';
 import 'package:capstone_frontend/presentation/screens/auth_screen.dart';
 import 'package:capstone_frontend/usecase/regional_usecase.dart';
+import 'package:capstone_frontend/usecase/signup_usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mocktail/mocktail.dart';
@@ -12,10 +15,14 @@ import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 
 @widgetbook.UseCase(name: 'Default', type: SignupScreen)
 Widget defaultAythScreenUseCase(BuildContext context) {
-  final usecase = createMockRegionalUseCase();
+  final usecaseRegional = createMockRegionalUseCase();
+  final usecaseSignup = createMockSignupUseCase();
 
-  return BlocProvider(
-    create: (_) => RegionalBloc(usecase),
+  return MultiBlocProvider(
+    providers: [
+      BlocProvider<SignupBloc>(create: (_) => SignupBloc(usecaseSignup)),
+      BlocProvider<RegionalBloc>(create: (_) => RegionalBloc(usecaseRegional)),
+    ],
     child: SignupScreen(),
   );
 }
@@ -54,6 +61,26 @@ MockRegionalUseCase createMockRegionalUseCase() {
       Subdistrict(id: '1.1', name: 'Gandekan'),
       Subdistrict(id: '1.1', name: 'Karanggayam'),
     ],
+  );
+
+  return usecase;
+}
+
+class MockSignupUseCase extends Mock implements SignupUsecase {}
+
+class FakeSignupRequestModel extends Fake implements SignupRequestModel {}
+
+MockSignupUseCase createMockSignupUseCase() {
+  final usecase = MockSignupUseCase();
+
+  registerFallbackValue(FakeSignupRequestModel());
+
+  when(() => usecase.signup(any())).thenAnswer(
+    (_) async => {
+      'success': true,
+      'message': 'Registrasi akun telah berhasil',
+      'email': 'example@gmail.com',
+    },
   );
 
   return usecase;
