@@ -8,6 +8,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
 
   SignupBloc(this.usecase) : super(SignupInitial()) {
     on<SignupRequested>((event, emit) async {
+      emit(SignupLoading());
       try {
         final result = await usecase.signup(event.request);
         if (result['success']) {
