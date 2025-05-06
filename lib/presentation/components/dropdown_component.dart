@@ -1,5 +1,6 @@
 import 'package:capstone_frontend/presentation/styles/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class XDropDown<T> extends StatelessWidget {
   final TextEditingController controller;
@@ -22,7 +23,7 @@ class XDropDown<T> extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: GoogleFonts.inter(
             color: XColors.black,
             fontSize: 12.0,
             fontWeight: FontWeight.w600,
@@ -34,7 +35,7 @@ class XDropDown<T> extends StatelessWidget {
           requestFocusOnTap: true,
           enableFilter: true,
           expandedInsets: EdgeInsets.zero,
-          textStyle: TextStyle(color: XColors.black, fontSize: 14.0),
+          textStyle: GoogleFonts.inter(color: XColors.black, fontSize: 14.0),
           menuStyle: MenuStyle(
             backgroundColor: WidgetStatePropertyAll(XColors.white),
             shadowColor: WidgetStatePropertyAll(Colors.transparent),
