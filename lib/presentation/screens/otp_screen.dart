@@ -1,6 +1,11 @@
+import 'package:capstone_frontend/bloc/verify_signup/verify_signup_bloc.dart';
+import 'package:capstone_frontend/bloc/verify_signup/verify_signup_event.dart';
+import 'package:capstone_frontend/bloc/verify_signup/verify_signup_state.dart';
+import 'package:capstone_frontend/data/model/verify_signup_model.dart';
 import 'package:capstone_frontend/presentation/components/button_component.dart';
 import 'package:capstone_frontend/presentation/styles/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -90,19 +95,42 @@ class _OtpScreenState extends State<OtpScreen> {
                 },
               ),
               SizedBox(height: 64.0, width: double.maxFinite),
-              XButton(
-                label: 'Verifikasi',
-                onPressed: () {
-                  if (otp.length < 6) {
-                    setState(() {
-                      errorMessage = 'Kode OTP harus diisi 6 digit';
-                    });
-                    return;
-                  }
+              BlocConsumer<VerifySignupBloc, VerifySignupState>(
+                builder: (context, state) {
+                  return XButton(
+                    label: 'Verifikasi',
+                    onPressed: () {
+                      if (otp.length < 6) {
+                        setState(() {
+                          errorMessage = 'Kode OTP harus diisi 6 digit';
+                        });
+                        return;
+                      }
 
-                  setState(() {
-                    errorMessage = null;
-                  });
+                      setState(() {
+                        errorMessage = null;
+                      });
+
+                      final request = VerifySignupRequestModel(
+                        email: widget.email,
+                        token: otp,
+                      );
+                      context.read<VerifySignupBloc>().add(
+                        VerifySignupRequested(request),
+                      );
+                    },
+                  );
+                },
+                listener: (context, state) {
+                  if (state is VerifySignupSuccess) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Verifikasi telah berhasil')),
+                    );
+                  } else if (state is VerifySignupFailure) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(state.error)));
+                  }
                 },
               ),
               SizedBox(height: 32.0, width: double.maxFinite),

@@ -19,7 +19,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+  final void Function(BuildContext, SignupState) listener;
+  const SignupScreen({required this.listener, super.key});
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
@@ -99,7 +100,7 @@ class _SignupScreenState extends State<SignupScreen>
             children: [
               SingleChildScrollView(
                 padding: EdgeInsets.all(16.0),
-                child: SignupForm(),
+                child: SignupForm(listener: widget.listener),
               ),
               SingleChildScrollView(
                 padding: EdgeInsets.all(16.0),
@@ -114,7 +115,8 @@ class _SignupScreenState extends State<SignupScreen>
 }
 
 class SignupForm extends StatefulWidget {
-  const SignupForm({super.key});
+  final void Function(BuildContext, SignupState) listener;
+  const SignupForm({required this.listener, super.key});
 
   @override
   State<SignupForm> createState() => _SignupFormState();
@@ -297,17 +299,7 @@ class _SignupFormState extends State<SignupForm> {
                 },
               );
             },
-            listener: (context, state) {
-              if (state is SignupSuccess) {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text(state.message)));
-              } else if (state is SignupFailure) {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text(state.error)));
-              }
-            },
+            listener: widget.listener,
           ),
         ],
       ),
