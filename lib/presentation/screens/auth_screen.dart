@@ -4,6 +4,8 @@ import 'package:capstone_frontend/bloc/regional/regional_state.dart';
 import 'package:capstone_frontend/bloc/signup/signup_bloc.dart';
 import 'package:capstone_frontend/bloc/signup/signup_event.dart';
 import 'package:capstone_frontend/bloc/signup/signup_state.dart';
+import 'package:capstone_frontend/bloc/verify_signup/verify_signup_bloc.dart';
+import 'package:capstone_frontend/core/di/service_locator.dart';
 import 'package:capstone_frontend/data/model/city_model.dart';
 import 'package:capstone_frontend/data/model/district_model.dart';
 import 'package:capstone_frontend/data/model/province_model.dart';
@@ -13,6 +15,7 @@ import 'package:capstone_frontend/data/validator.dart';
 import 'package:capstone_frontend/presentation/components/button_component.dart';
 import 'package:capstone_frontend/presentation/components/dropdown_component.dart';
 import 'package:capstone_frontend/presentation/components/textfield_component.dart';
+import 'package:capstone_frontend/presentation/screens/otp_screen.dart';
 import 'package:capstone_frontend/presentation/styles/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -302,6 +305,17 @@ class _SignupFormState extends State<SignupForm> {
                 ScaffoldMessenger.of(
                   context,
                 ).showSnackBar(SnackBar(content: Text(state.message)));
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (_) => BlocProvider(
+                          create: (context) => sl<VerifySignupBloc>(),
+                          child: OtpScreen(email: _emController.text),
+                        ),
+                  ),
+                );
               } else if (state is SignupFailure) {
                 ScaffoldMessenger.of(
                   context,
